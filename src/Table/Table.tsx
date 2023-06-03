@@ -1,9 +1,9 @@
 import { clsx } from "clsx";
 
-import { ReactComponent as CheckboxOff } from './assets/checkbox-off.svg';
-import { ReactComponent as CheckboxOn } from './assets/checkbox-on.svg';
 import { find, includes, reject } from "lodash";
 import { useCallback, useMemo, useState } from "react";
+import { ReactComponent as CheckboxOff } from './assets/checkbox-off.svg';
+import { ReactComponent as CheckboxOn } from './assets/checkbox-on.svg';
 import { ReactComponent as RadioOff } from './assets/radio-off.svg';
 import { ReactComponent as RadioOn } from './assets/radio-on.svg';
 import { ReactComponent as SortDown } from './assets/sort-down.svg';
@@ -33,6 +33,8 @@ enum SortDirection {
 
 export default function Table<T extends object>(props: TableProps<T>) {
   const { data = [], columnDefs = [], rowSelection = 'none', onSelectionChanged = () => { } } = props;
+
+  const useMobileTableLayout = columnDefs.length <= 3;
 
   // ---- Sortable 
   const [sortColumn, setSortColumn] = useState<string>();
@@ -79,8 +81,11 @@ export default function Table<T extends object>(props: TableProps<T>) {
   const UnselectedIcon = rowSelection === 'single' ? RadioOff : CheckboxOff;
 
   return (
-    <table className="rounded-3xl border-separate shadow-md border-spacing-0 overflow-hidden">
-      <thead className="bg-[#F7F7F7]">
+    <table className="bg-white md:rounded-3xl rounded-lg shadow-md overflow-hidden w-full">
+      <thead className={clsx(
+        "bg-[#F7F7F7]",
+        !useMobileTableLayout && "hidden sm:table-header-group"
+      )}>
         <tr>
           {rowSelection !== 'none' && <th />}
 
@@ -88,7 +93,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
             return (
               <th
                 key={columnDef.id}
-                className="text-xl md:text-lg sm:test-base xs:text-base tracking-normal leading-7 font-bold p-6 text-left"
+                className="text-base md:text-lg lg:text-xl tracking-normal leading-7 font-bold px-6 py-2 md:py-6 text-left"
               >
                 {columnDef.header}
 
@@ -107,7 +112,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
       </thead>
 
       <tbody>
-        {displayData.map((entry, index) => {
+        {displayData.map((entry, rowIndex) => {
           const isSelected = includes(selectedIds, entry.id);
 
           return (
@@ -115,28 +120,31 @@ export default function Table<T extends object>(props: TableProps<T>) {
               key={entry.id}
               className={clsx(
                 "hover:bg-[#EFEDFD]",
-                isSelected && "border-t bg-[#EFEDFD]"
+                rowIndex > 0 && 'border-t border-[#E1E1E1]',
+                isSelected && "bg-[#EFEDFD]"
               )}
               onClick={() => toggleSelected(entry.id)}>
               {rowSelection !== 'none' &&
                 <td
                   className={clsx(
-                    "pl-6 py-6 pr-0",
-                    index > 0 && "border-t border-[#E1E1E1]"
+                    "pl-6 py-6",
+                    !useMobileTableLayout && "align-top sm:align-middle",
+                    rowIndex > 0 && "border-t border-[#E1E1E1]"
                   )}>
                   {isSelected ?
-                    <SelectedIcon className="h-8 w-8" /> :
-                    <UnselectedIcon className="h-8 w-8" />}
+                    <SelectedIcon className="h-6 w-6 sm:h-8 sm:w-8" /> :
+                    <UnselectedIcon className="h-6 w-6 sm:h-8 sm:w-8" />}
                 </td>}
 
 
-              {columnDefs.map((columnDef) => {
+              {columnDefs.map((columnDef, columnIndex) => {
                 return (
                   <td
                     key={columnDef.id}
+                    data-title={columnDef.header}
                     className={clsx(
-                      "text-xl md:text-lg sm:test-base xs:text-base tracking-[0.1px] leading-7 p-6 text-left",
-                      index > 0 && "border-t border-[#E1E1E1]"
+                      "text-base md:text-lg lg:text-xl tracking-[0.1px] leading-7 px-6 py-2 md:py-6 text-left",
+                      !useMobileTableLayout && " sm:table-cell sm:before:hidden block before:content-[attr(data-title)'_:'] before:inline-block before:font-bold ",
                     )}
                   >
                     {columnDef.cell(entry)}
@@ -147,6 +155,6 @@ export default function Table<T extends object>(props: TableProps<T>) {
           );
         })}
       </tbody>
-    </table>
+    </table >
   );
 }

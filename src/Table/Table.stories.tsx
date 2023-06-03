@@ -66,7 +66,28 @@ export const TableWithSortableHeader: Story = {
   render: () => (
     <Table
       columnDefs={[
-        ...columnDefs,
+        {
+          id: "OPERATOR",
+          header: "Operator",
+          cell: ({ operator }) => operator,
+          sortable: true,
+          comparator: (nodeA, nodeB) => nodeA.operator.localeCompare(nodeB.operator),
+        },
+        {
+          id: "HEADSET",
+          header: "Headset",
+          cell: ({ headset }) => headset,
+          sortable: true,
+          comparator: (nodeA, nodeB) => nodeA.headset.localeCompare(nodeB.headset),
+        },
+        {
+          id: "HAS_3G",
+          header: "3G Availability",
+          cell: ({ has3G }) => (has3G ? "Yes" : "No"),
+          sortable: true,
+          // Exciting boolean compare function ahead!
+          comparator: (nodeA, nodeB) => +nodeA.has3G - +nodeB.has3G,
+        },
         {
           id: "USER_COUNT",
           header: "Users",
@@ -85,21 +106,12 @@ export const TableWithRadioButton: Story = {
 
     return (
       <>
-        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300">
+        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
           Selected: "{selection.join(', ')}"
         </div>
 
         <Table
-          columnDefs={[
-            ...columnDefs,
-            {
-              id: "USER_COUNT",
-              header: "Users",
-              cell: ({ userCount }) => (userCount.toLocaleString()),
-              sortable: true,
-              comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
-            },
-          ]}
+          columnDefs={columnDefs}
           data={data}
           rowSelection='single'
           onSelectionChanged={setSelection} />
@@ -114,7 +126,7 @@ export const TableWithCheckbox: Story = {
 
     return (
       <>
-        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300">
+        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
           Selected: "{selection.join(', ')}"
         </div>
 
