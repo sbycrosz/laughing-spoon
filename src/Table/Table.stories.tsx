@@ -19,14 +19,14 @@ const data = [
     operator: "Celcom Axiata (LTE)",
     headset: "Celcom / My Celcom",
     has3G: true,
-    userCount: 4000000,
+    userCount: 5000000,
   },
   {
     id: "10002",
     operator: "DiGi Telecom (LTE)",
     headset: "DiGi 1800 / DiGi",
     has3G: true,
-    userCount: 5000000,
+    userCount: 4000000,
   },
   {
     id: "10003",
@@ -63,7 +63,16 @@ export const BasicTable: Story = {
 
 export const TableWithSortableHeader: Story = {
   render: () => (
-    <Table columnDefs={columnDefs} data={data} />
+    <Table columnDefs={[
+      ...columnDefs,
+      {
+        id: "USER_COUNT",
+        header: "Users",
+        cell: ({ userCount }) => (userCount.toLocaleString()),
+        sortable: true,
+        comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
+      },
+    ]} data={data} />
   )
 };
 
