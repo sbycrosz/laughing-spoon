@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import Table, { ColumnDef } from "./Table";
+import { useState } from "react";
 
 const meta: Meta<typeof Table> = {
   title: "Example/Table",
@@ -76,14 +77,34 @@ export const TableWithSortableHeader: Story = {
   )
 };
 
-export const TableWithCheckbox: Story = {
-  render: () => (
-    <Table columnDefs={columnDefs} data={data} />
-  )
+export const TableWithRadioButton: Story = {
+  render: () => {
+    const [selection, setSelection] = useState<string[]>([]);
+
+    return (
+      <>
+        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300">
+          Selected: "{selection.join(', ')}"
+        </div>
+
+        <Table
+          columnDefs={columnDefs}
+          data={data}
+          rowSelection='single'
+          onSelectionChanged={setSelection} />
+      </>
+    )
+  }
 };
 
-export const TableWithRadioButton: Story = {
-  render: () => (
-    <Table columnDefs={columnDefs} data={data} />
-  )
+export const TableWithCheckbox: Story = {
+  render: () => {
+    const [selection, setSelection] = useState([]);
+
+    return (
+      <>
+        <Table columnDefs={columnDefs} data={data} />
+      </>
+    )
+  }
 };

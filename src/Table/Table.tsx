@@ -2,10 +2,10 @@ import { clsx } from "clsx";
 
 // import { ReactComponent as CheckboxOff } from './assets/checkbox-off.svg';
 // import { ReactComponent as CheckboxOn } from './assets/checkbox-on.svg';
-// import { ReactComponent as RadioOff } from './assets/radio-off.svg';
-// import { ReactComponent as RadioOn } from './assets/radio-on.svg';
-import _, { find, map } from "lodash";
-import { useMemo, useState } from "react";
+import { find, includes, reject } from "lodash";
+import { useCallback, useMemo, useState } from "react";
+import { ReactComponent as RadioOff } from './assets/radio-off.svg';
+import { ReactComponent as RadioOn } from './assets/radio-on.svg';
 import { ReactComponent as SortDown } from './assets/sort-down.svg';
 import { ReactComponent as SortNeutral } from './assets/sort-neutral.svg';
 import { ReactComponent as SortUp } from './assets/sort-up.svg';
@@ -14,13 +14,15 @@ export interface ColumnDef<T> {
   id: string;
   header: string;
   cell: (cell: T) => string;
-  sortable?: boolean,
+  sortable?: boolean;
   comparator?: (nodeA: T, nodeB: T) => number;
 }
 
 export interface TableProps<T> {
   data: (T & { id: string })[];
   columnDefs: ColumnDef<T>[];
+  rowSelection?: 'none' | 'single' | 'multiple';
+  onSelectionChanged?: (ids: string[]) => void;
 }
 
 enum SortDirection {
@@ -30,7 +32,7 @@ enum SortDirection {
 }
 
 export default function Table<T extends object>(props: TableProps<T>) {
-  const { data = [], columnDefs = [] } = props;
+  const { data = [], columnDefs = [], rowSelection = 'none', onSelectionChanged = () => { } } = props;
 
   // ---- Sortable 
   const [sortColumn, setSortColumn] = useState<string>();
@@ -58,10 +60,28 @@ export default function Table<T extends object>(props: TableProps<T>) {
       setSortDirection(SortDirection.ASCENDING);
     }
   }, [sortDirection, setSortDirection, sortColumn, setSortColumn]);
+
+  // ---- Radio / Checkbox
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const toggleSelected = useCallback((entryId: string,) => {
+    const isSelected = includes(selectedIds, entryId);
+
+    const newSelectedIds = isSelected ?
+      reject(selectedIds, (v) => v === entryId) :
+      rowSelection === 'single' ? [entryId] :
+        [...selectedIds, entryId]
+
+    onSelectionChanged(newSelectedIds);
+    setSelectedIds(newSelectedIds)
+
+  }, [selectedIds, setSelectedIds, onSelectionChanged, rowSelection]);
+
   return (
     <table className="rounded-3xl border-separate shadow-md border-spacing-0 overflow-hidden">
       <thead className="bg-[#F7F7F7]">
         <tr>
+          {rowSelection !== 'none' && <th />}
+
           {columnDefs.map((columnDef) => {
             return (
               <th
@@ -86,8 +106,25 @@ export default function Table<T extends object>(props: TableProps<T>) {
 
       <tbody>
         {displayData.map((entry, index) => {
+          const isSelected = includes(selectedIds, entry.id);
+
           return (
-            <tr key={entry.id}>
+            <tr
+              key={entry.id}
+              className="hover:bg-[#DEDAFA]"
+              onClick={() => toggleSelected(entry.id)}>
+              {rowSelection !== 'none' &&
+                <td
+                  className={clsx(
+                    "pl-6 py-6 pr-0",
+                    index > 0 && "border-t border-[#E1E1E1]"
+                  )}>
+                  {isSelected ?
+                    <RadioOn className="h-8 w-8" /> :
+                    <RadioOff className="h-8 w-8" />}
+                </td>}
+
+
               {columnDefs.map((columnDef) => {
                 return (
                   <td
