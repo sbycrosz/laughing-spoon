@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 
-// import { ReactComponent as CheckboxOff } from './assets/checkbox-off.svg';
-// import { ReactComponent as CheckboxOn } from './assets/checkbox-on.svg';
+import { ReactComponent as CheckboxOff } from './assets/checkbox-off.svg';
+import { ReactComponent as CheckboxOn } from './assets/checkbox-on.svg';
 import { find, includes, reject } from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { ReactComponent as RadioOff } from './assets/radio-off.svg';
@@ -64,8 +64,9 @@ export default function Table<T extends object>(props: TableProps<T>) {
   // ---- Radio / Checkbox
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const toggleSelected = useCallback((entryId: string,) => {
-    const isSelected = includes(selectedIds, entryId);
+    if (rowSelection === 'none') return
 
+    const isSelected = includes(selectedIds, entryId);
     const newSelectedIds = isSelected ?
       reject(selectedIds, (v) => v === entryId) :
       rowSelection === 'single' ? [entryId] :
@@ -73,8 +74,9 @@ export default function Table<T extends object>(props: TableProps<T>) {
 
     onSelectionChanged(newSelectedIds);
     setSelectedIds(newSelectedIds)
-
   }, [selectedIds, setSelectedIds, onSelectionChanged, rowSelection]);
+  const SelectedIcon = rowSelection === 'single' ? RadioOn : CheckboxOn;
+  const UnselectedIcon = rowSelection === 'single' ? RadioOff : CheckboxOff;
 
   return (
     <table className="rounded-3xl border-separate shadow-md border-spacing-0 overflow-hidden">
@@ -92,7 +94,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
 
                 {columnDef.sortable &&
                   <span
-                    className="ml-2.5 h-14 w-14 inline-flex items-center justify-center rounded-full hover:bg-[#DEDAFA]"
+                    className="ml-2.5 h-14 w-14 inline-flex items-center justify-center rounded-full hover:bg-[#EFEDFD]"
                     onClick={() => sortData(columnDef.id)}>
                     {(sortColumn === columnDef.id && sortDirection === SortDirection.ASCENDING) ? <SortDown className="h-4 w-3 inline" /> :
                       (sortColumn === columnDef.id && sortDirection === SortDirection.DESCENDING) ? <SortUp className="h-4 w-3 inline" /> :
@@ -111,7 +113,10 @@ export default function Table<T extends object>(props: TableProps<T>) {
           return (
             <tr
               key={entry.id}
-              className="hover:bg-[#DEDAFA]"
+              className={clsx(
+                "hover:bg-[#EFEDFD]",
+                isSelected && "border-t bg-[#EFEDFD]"
+              )}
               onClick={() => toggleSelected(entry.id)}>
               {rowSelection !== 'none' &&
                 <td
@@ -120,8 +125,8 @@ export default function Table<T extends object>(props: TableProps<T>) {
                     index > 0 && "border-t border-[#E1E1E1]"
                   )}>
                   {isSelected ?
-                    <RadioOn className="h-8 w-8" /> :
-                    <RadioOff className="h-8 w-8" />}
+                    <SelectedIcon className="h-8 w-8" /> :
+                    <UnselectedIcon className="h-8 w-8" />}
                 </td>}
 
 

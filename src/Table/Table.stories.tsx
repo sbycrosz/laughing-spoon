@@ -64,16 +64,18 @@ export const BasicTable: Story = {
 
 export const TableWithSortableHeader: Story = {
   render: () => (
-    <Table columnDefs={[
-      ...columnDefs,
-      {
-        id: "USER_COUNT",
-        header: "Users",
-        cell: ({ userCount }) => (userCount.toLocaleString()),
-        sortable: true,
-        comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
-      },
-    ]} data={data} />
+    <Table
+      columnDefs={[
+        ...columnDefs,
+        {
+          id: "USER_COUNT",
+          header: "Users",
+          cell: ({ userCount }) => (userCount.toLocaleString()),
+          sortable: true,
+          comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
+        },
+      ]}
+      data={data} />
   )
 };
 
@@ -88,7 +90,16 @@ export const TableWithRadioButton: Story = {
         </div>
 
         <Table
-          columnDefs={columnDefs}
+          columnDefs={[
+            ...columnDefs,
+            {
+              id: "USER_COUNT",
+              header: "Users",
+              cell: ({ userCount }) => (userCount.toLocaleString()),
+              sortable: true,
+              comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
+            },
+          ]}
           data={data}
           rowSelection='single'
           onSelectionChanged={setSelection} />
@@ -99,11 +110,19 @@ export const TableWithRadioButton: Story = {
 
 export const TableWithCheckbox: Story = {
   render: () => {
-    const [selection, setSelection] = useState([]);
+    const [selection, setSelection] = useState<string[]>([]);
 
     return (
       <>
-        <Table columnDefs={columnDefs} data={data} />
+        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300">
+          Selected: "{selection.join(', ')}"
+        </div>
+
+        <Table
+          columnDefs={columnDefs}
+          data={data}
+          rowSelection='multiple'
+          onSelectionChanged={setSelection} />
       </>
     )
   }
