@@ -51,7 +51,7 @@ const columnDefs: ColumnDef<Entry>[] = [
   },
   {
     id: "HAS_3G",
-    header: "3G Availability",
+    header: "Has 3G",
     cell: ({ has3G }) => (has3G ? "Yes" : "No"),
   },
 ];
@@ -82,7 +82,7 @@ export const TableWithSortableHeader: Story = {
         },
         {
           id: "HAS_3G",
-          header: "3G Availability",
+          header: "Has 3G",
           cell: ({ has3G }) => (has3G ? "Yes" : "No"),
           sortable: true,
           // Exciting boolean compare function ahead!
@@ -134,6 +134,68 @@ export const TableWithCheckbox: Story = {
           columnDefs={columnDefs}
           data={data}
           rowSelection='multiple'
+          onSelectionChanged={setSelection} />
+      </>
+    )
+  }
+};
+
+export const Responsive1: Story = {
+  name: '(Responsive) Table with more than 3 fields',
+  parameters: {
+    viewport: {
+      defaultViewport: 'mobile2',
+    },
+  },
+  render: () => {
+    const [selection, setSelection] = useState<string[]>([]);
+
+    return (
+      <>
+        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
+          Selected: "{selection.join(', ')}"
+        </div>
+
+        <Table
+          columnDefs={[
+            ...columnDefs,
+            {
+              id: "USER_COUNT",
+              header: "Users",
+              cell: ({ userCount }) => (userCount.toLocaleString()),
+              sortable: true,
+              comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
+            },
+          ]}
+          data={data}
+          rowSelection='multiple'
+          onSelectionChanged={setSelection} />
+      </>
+    )
+  }
+};
+
+
+export const Responsive2: Story = {
+  name: '(Responsive) Table at most 3 fields',
+  parameters: {
+    viewport: {
+      defaultViewport: 'mobile2',
+    },
+  },
+  render: () => {
+    const [selection, setSelection] = useState<string[]>([]);
+
+    return (
+      <>
+        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
+          Selected: "{selection.join(', ')}"
+        </div>
+
+        <Table
+          columnDefs={columnDefs}
+          data={data}
+          rowSelection='single'
           onSelectionChanged={setSelection} />
       </>
     )

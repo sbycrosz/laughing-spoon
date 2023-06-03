@@ -34,7 +34,7 @@ enum SortDirection {
 export default function Table<T extends object>(props: TableProps<T>) {
   const { data = [], columnDefs = [], rowSelection = 'none', onSelectionChanged = () => { } } = props;
 
-  const useMobileTableLayout = columnDefs.length <= 3;
+  const useCardLayoutOnMobile = columnDefs.length > 3;
 
   // ---- Sortable 
   const [sortColumn, setSortColumn] = useState<string>();
@@ -84,7 +84,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
     <table className="bg-white md:rounded-3xl rounded-lg shadow-md overflow-hidden w-full">
       <thead className={clsx(
         "bg-[#F7F7F7]",
-        !useMobileTableLayout && "hidden sm:table-header-group"
+        useCardLayoutOnMobile && "hidden sm:table-header-group"
       )}>
         <tr>
           {rowSelection !== 'none' && <th />}
@@ -128,7 +128,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
                 <td
                   className={clsx(
                     "pl-6 py-6",
-                    !useMobileTableLayout && "align-top sm:align-middle",
+                    useCardLayoutOnMobile && "align-top sm:align-middle",
                     rowIndex > 0 && "border-t border-[#E1E1E1]"
                   )}>
                   {isSelected ?
@@ -144,7 +144,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
                     data-title={columnDef.header}
                     className={clsx(
                       "text-base md:text-lg lg:text-xl tracking-[0.1px] leading-7 px-6 py-2 md:py-6 text-left",
-                      !useMobileTableLayout && " sm:table-cell sm:before:hidden block before:content-[attr(data-title)'_:'] before:inline-block before:font-bold ",
+                      useCardLayoutOnMobile && " sm:table-cell sm:before:hidden block before:content-[attr(data-title)':'] before:inline-block before:font-bold before:w-1/3 ",
                     )}
                   >
                     {columnDef.cell(entry)}
