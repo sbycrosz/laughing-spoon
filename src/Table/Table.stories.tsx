@@ -8,7 +8,9 @@ const meta: Meta<typeof Table> = {
   component: Table,
   parameters: {
     layout: "padded",
+    controls: { hideNoControlsWarning: true },
   },
+  argTypes: { onSelectionChanged: { action: "selectionChanged" } },
 };
 
 export default meta;
@@ -102,45 +104,25 @@ export const TableWithSortableHeader: Story = {
 };
 
 export const TableWithRadioButton: Story = {
-  render: () => {
-    const [selection, setSelection] = useState<string[]>([]);
-
-    return (
-      <>
-        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
-          Selected: "{selection.join(", ")}"
-        </div>
-
-        <Table
-          columnDefs={columnDefs}
-          data={data}
-          rowSelection="single"
-          onSelectionChanged={setSelection}
-        />
-      </>
-    );
-  },
+  render: (props) => (
+    <Table
+      columnDefs={columnDefs}
+      data={data}
+      rowSelection="single"
+      onSelectionChanged={props.onSelectionChanged}
+    />
+  ),
 };
 
 export const TableWithCheckbox: Story = {
-  render: () => {
-    const [selection, setSelection] = useState<string[]>([]);
-
-    return (
-      <>
-        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
-          Selected: "{selection.join(", ")}"
-        </div>
-
-        <Table
-          columnDefs={columnDefs}
-          data={data}
-          rowSelection="multiple"
-          onSelectionChanged={setSelection}
-        />
-      </>
-    );
-  },
+  render: (props) => (
+    <Table
+      columnDefs={columnDefs}
+      data={data}
+      rowSelection="multiple"
+      onSelectionChanged={props.onSelectionChanged}
+    />
+  ),
 };
 
 export const Responsive1: Story = {
@@ -150,33 +132,23 @@ export const Responsive1: Story = {
       defaultViewport: "mobile2",
     },
   },
-  render: () => {
-    const [selection, setSelection] = useState<string[]>([]);
-
-    return (
-      <>
-        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
-          Selected: "{selection.join(", ")}"
-        </div>
-
-        <Table
-          columnDefs={[
-            ...columnDefs,
-            {
-              id: "USER_COUNT",
-              header: "Users",
-              cell: ({ userCount }) => userCount.toLocaleString(),
-              sortable: true,
-              comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
-            },
-          ]}
-          data={data}
-          rowSelection="multiple"
-          onSelectionChanged={setSelection}
-        />
-      </>
-    );
-  },
+  render: (props) => (
+    <Table
+      columnDefs={[
+        ...columnDefs,
+        {
+          id: "USER_COUNT",
+          header: "Users",
+          cell: ({ userCount }) => userCount.toLocaleString(),
+          sortable: true,
+          comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
+        },
+      ]}
+      data={data}
+      rowSelection="multiple"
+      onSelectionChanged={props.onSelectionChanged}
+    />
+  ),
 };
 
 export const Responsive2: Story = {
@@ -186,22 +158,12 @@ export const Responsive2: Story = {
       defaultViewport: "mobile2",
     },
   },
-  render: () => {
-    const [selection, setSelection] = useState<string[]>([]);
-
-    return (
-      <>
-        <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
-          Selected: "{selection.join(", ")}"
-        </div>
-
-        <Table
-          columnDefs={columnDefs}
-          data={data}
-          rowSelection="single"
-          onSelectionChanged={setSelection}
-        />
-      </>
-    );
-  },
+  render: (props) => (
+    <Table
+      columnDefs={columnDefs}
+      data={data}
+      rowSelection="single"
+      onSelectionChanged={props.onSelectionChanged}
+    />
+  ),
 };
