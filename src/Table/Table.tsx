@@ -36,7 +36,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
     data = [],
     columnDefs = [],
     rowSelection = "none",
-    onSelectionChanged = () => {},
+    onSelectionChanged = () => { },
   } = props;
 
   const useCardLayoutOnMobile = columnDefs.length > 3;
@@ -86,8 +86,8 @@ export default function Table<T extends object>(props: TableProps<T>) {
       const newSelectedIds = isSelected
         ? reject(selectedIds, (v) => v === entryId)
         : rowSelection === "single"
-        ? [entryId]
-        : [...selectedIds, entryId];
+          ? [entryId]
+          : [...selectedIds, entryId];
 
       onSelectionChanged(newSelectedIds);
       setSelectedIds(newSelectedIds);
@@ -123,7 +123,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
                     onClick={() => sortData(columnDef.id)}
                   >
                     {sortColumn === columnDef.id &&
-                    sortDirection === SortDirection.ASCENDING ? (
+                      sortDirection === SortDirection.ASCENDING ? (
                       <SortDown className="h-4 w-3 inline" />
                     ) : sortColumn === columnDef.id &&
                       sortDirection === SortDirection.DESCENDING ? (
@@ -183,7 +183,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
                     className={clsx(
                       "text-base md:text-lg lg:text-xl tracking-[0.1px] leading-7 px-6 py-2 md:py-6 text-left",
                       useCardLayoutOnMobile &&
-                        " sm:table-cell sm:before:hidden block before:content-[attr(data-title)':'] before:inline-block before:font-bold before:w-1/3 "
+                      " sm:table-cell sm:before:hidden block before:content-[attr(data-title)':'] before:inline-block before:font-bold before:w-1/3 "
                     )}
                   >
                     {columnDef.cell(entry)}

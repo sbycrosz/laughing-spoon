@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import "@testing-library/jest-dom/extend-expect";
-import { act, queryAllByTestId, render, waitFor } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import Table, { ColumnDef } from "../Table";
