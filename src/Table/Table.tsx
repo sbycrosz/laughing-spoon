@@ -98,7 +98,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
   const UnselectedIcon = rowSelection === "single" ? RadioOff : CheckboxOff;
 
   return (
-    <table className="bg-white md:rounded-3xl rounded-lg shadow-md overflow-hidden w-full">
+    <table className="font-sans bg-white md:rounded-3xl rounded-lg shadow-md overflow-hidden w-full">
       <thead
         className={clsx(
           "bg-[#F7F7F7]",

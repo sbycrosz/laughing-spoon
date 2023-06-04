@@ -1,2 +1,20 @@
-<!-- HACK: should properly setup tailwindcss ¯\_(ツ)_/¯ -->
+<!-- Avenir ain't free; This is a close alternative -->
+<!-- http://joelcrawfordsmith.com/closest-font/font/avenir -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
+
+<!-- HACK: should properly setup tailwindcss -->
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      fontFamily: {
+        sans: ["Nunito Sans", "sans-serif"],
+      },
+    },
+  };
+</script>
