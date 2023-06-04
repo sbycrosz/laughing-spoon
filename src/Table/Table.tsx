@@ -118,6 +118,7 @@ export default function Table<T extends object>(props: TableProps<T>) {
 
                 {columnDef.sortable && (
                   <span
+                    data-testid={`SORT-${columnDef.id}`}
                     className="ml-2.5 h-14 w-14 inline-flex items-center justify-center rounded-full hover:bg-[#EFEDFD]"
                     onClick={() => sortData(columnDef.id)}
                   >
@@ -161,9 +162,15 @@ export default function Table<T extends object>(props: TableProps<T>) {
                   )}
                 >
                   {isSelected ? (
-                    <SelectedIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                    <SelectedIcon
+                      data-testid="SELECTED"
+                      className="h-6 w-6 sm:h-8 sm:w-8"
+                    />
                   ) : (
-                    <UnselectedIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                    <UnselectedIcon
+                      data-testid="UNSELECTED"
+                      className="h-6 w-6 sm:h-8 sm:w-8"
+                    />
                   )}
                 </td>
               )}
