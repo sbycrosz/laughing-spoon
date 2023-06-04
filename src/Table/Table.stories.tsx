@@ -36,8 +36,8 @@ const data = [
     has3G: false,
     userCount: 6000000,
   },
-]
-type Entry = typeof data[0];
+];
+type Entry = (typeof data)[0];
 const columnDefs: ColumnDef<Entry>[] = [
   {
     id: "OPERATOR",
@@ -57,9 +57,7 @@ const columnDefs: ColumnDef<Entry>[] = [
 ];
 
 export const BasicTable: Story = {
-  render: () => (
-    <Table columnDefs={columnDefs} data={data} />
-  )
+  render: () => <Table columnDefs={columnDefs} data={data} />,
 };
 
 export const TableWithSortableHeader: Story = {
@@ -71,14 +69,16 @@ export const TableWithSortableHeader: Story = {
           header: "Operator",
           cell: ({ operator }) => operator,
           sortable: true,
-          comparator: (nodeA, nodeB) => nodeA.operator.localeCompare(nodeB.operator),
+          comparator: (nodeA, nodeB) =>
+            nodeA.operator.localeCompare(nodeB.operator),
         },
         {
           id: "HEADSET",
           header: "Headset",
           cell: ({ headset }) => headset,
           sortable: true,
-          comparator: (nodeA, nodeB) => nodeA.headset.localeCompare(nodeB.headset),
+          comparator: (nodeA, nodeB) =>
+            nodeA.headset.localeCompare(nodeB.headset),
         },
         {
           id: "HAS_3G",
@@ -91,13 +91,14 @@ export const TableWithSortableHeader: Story = {
         {
           id: "USER_COUNT",
           header: "Users",
-          cell: ({ userCount }) => (userCount.toLocaleString()),
+          cell: ({ userCount }) => userCount.toLocaleString(),
           sortable: true,
           comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
         },
       ]}
-      data={data} />
-  )
+      data={data}
+    />
+  ),
 };
 
 export const TableWithRadioButton: Story = {
@@ -107,17 +108,18 @@ export const TableWithRadioButton: Story = {
     return (
       <>
         <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
-          Selected: "{selection.join(', ')}"
+          Selected: "{selection.join(", ")}"
         </div>
 
         <Table
           columnDefs={columnDefs}
           data={data}
-          rowSelection='single'
-          onSelectionChanged={setSelection} />
+          rowSelection="single"
+          onSelectionChanged={setSelection}
+        />
       </>
-    )
-  }
+    );
+  },
 };
 
 export const TableWithCheckbox: Story = {
@@ -127,24 +129,25 @@ export const TableWithCheckbox: Story = {
     return (
       <>
         <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
-          Selected: "{selection.join(', ')}"
+          Selected: "{selection.join(", ")}"
         </div>
 
         <Table
           columnDefs={columnDefs}
           data={data}
-          rowSelection='multiple'
-          onSelectionChanged={setSelection} />
+          rowSelection="multiple"
+          onSelectionChanged={setSelection}
+        />
       </>
-    )
-  }
+    );
+  },
 };
 
 export const Responsive1: Story = {
-  name: '(Responsive) Table with more than 3 fields',
+  name: "(Responsive) Table with more than 3 fields",
   parameters: {
     viewport: {
-      defaultViewport: 'mobile2',
+      defaultViewport: "mobile2",
     },
   },
   render: () => {
@@ -153,7 +156,7 @@ export const Responsive1: Story = {
     return (
       <>
         <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
-          Selected: "{selection.join(', ')}"
+          Selected: "{selection.join(", ")}"
         </div>
 
         <Table
@@ -162,25 +165,25 @@ export const Responsive1: Story = {
             {
               id: "USER_COUNT",
               header: "Users",
-              cell: ({ userCount }) => (userCount.toLocaleString()),
+              cell: ({ userCount }) => userCount.toLocaleString(),
               sortable: true,
               comparator: (nodeA, nodeB) => nodeA.userCount - nodeB.userCount,
             },
           ]}
           data={data}
-          rowSelection='multiple'
-          onSelectionChanged={setSelection} />
+          rowSelection="multiple"
+          onSelectionChanged={setSelection}
+        />
       </>
-    )
-  }
+    );
+  },
 };
 
-
 export const Responsive2: Story = {
-  name: '(Responsive) Table at most 3 fields',
+  name: "(Responsive) Table at most 3 fields",
   parameters: {
     viewport: {
-      defaultViewport: 'mobile2',
+      defaultViewport: "mobile2",
     },
   },
   render: () => {
@@ -189,15 +192,16 @@ export const Responsive2: Story = {
     return (
       <>
         <div className="my-10 px-3 py-5 inline-block rounded border border-slate-300 bg-white">
-          Selected: "{selection.join(', ')}"
+          Selected: "{selection.join(", ")}"
         </div>
 
         <Table
           columnDefs={columnDefs}
           data={data}
-          rowSelection='single'
-          onSelectionChanged={setSelection} />
+          rowSelection="single"
+          onSelectionChanged={setSelection}
+        />
       </>
-    )
-  }
+    );
+  },
 };
