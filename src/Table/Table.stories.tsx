@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import "react";
-import Table from "./Table";
+import Table, { TableProps } from "./Table";
 
 const meta: Meta<typeof Table> = {
   title: "Example/Table",
@@ -10,15 +10,15 @@ const meta: Meta<typeof Table> = {
 
 export default meta;
 
-type SampleEntry = {
+interface SampleEntry {
   id: string;
   operator: string;
   headset: string;
   has3G: boolean;
   userCount: number;
-};
+}
 
-type Story = StoryObj<typeof Table<SampleEntry>>;
+type Story = StoryObj<TableProps<SampleEntry>>;
 
 export const BasicTable: Story = {
   args: {
