@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
-import Table, { ColumnDef } from "./Table";
+import "react";
+import Table from "./Table";
 
 const meta: Meta<typeof Table> = {
   title: "Example/Table",
