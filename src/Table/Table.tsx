@@ -18,10 +18,45 @@ export interface ColumnDef<T> {
   comparator?: (nodeA: T, nodeB: T) => number;
 }
 
+/**
+ * Defines the properties for a table component.
+ *
+ * @template T The type of data displayed in the table.
+ */
 export interface TableProps<T> {
+  /**
+   * The data to be displayed in the table. Each row must have a unique identifier specified by the 'id' property.
+   */
   data: (T & { id: string })[];
+
+  /**
+   * An array of column definitions for the table.
+   * Each column definition should include the following properties:
+   * - `id: string` **(required)**: The unique identifier for the column.
+   * - `header: string` **(required)**: The text to be displayed as the column header.
+   * - `cell: (cell: T) => string` **(required)**: A parser function that returns the string to be displayed in each cell.
+   *
+   * The following additional properties can be used for column sorting:
+   * - `sortable?: boolean`: Indicates whether the column is sortable.
+   * - `comparator?: (nodeA: T, nodeB: T) => number`: A comparator function used for sorting the column.
+   *   - Return value of 0 indicates that nodeA is the same as nodeB.
+   *   - Return value greater than 0 indicates that nodeA should be sorted after nodeB.
+   *   - Return value less than 0 indicates that nodeA should be sorted before nodeB.
+   */
   columnDefs: ColumnDef<T>[];
+
+  /**
+   * Specifies the type of row selection in the table. It can be set to 'none', 'single', or 'multiple'.
+   * - 'none': No row selection is enabled.
+   * - 'single': Only one row can be selected at a time. Selecting a new row will unselect the previously selected row.
+   * - 'multiple': Multiple rows can be selected simultaneously.
+   */
   rowSelection?: "none" | "single" | "multiple";
+
+  /**
+   * A callback function that is called when the selection in the table changes.
+   * It receives an array of the selected row IDs.
+   */
   onSelectionChanged?: (ids: string[]) => void;
 }
 
@@ -31,14 +66,12 @@ enum SortDirection {
   DESCENDING,
 }
 
-export default function Table<T extends object>(props: TableProps<T>) {
-  const {
-    data = [],
-    columnDefs = [],
-    rowSelection = "none",
-    onSelectionChanged = () => {},
-  } = props;
-
+export default function Table<T extends object>({
+  data = [],
+  columnDefs = [],
+  rowSelection = "none",
+  onSelectionChanged = () => {},
+}: TableProps<T>) {
   const useCardLayoutOnMobile = columnDefs.length > 3;
 
   // ---- Sortable

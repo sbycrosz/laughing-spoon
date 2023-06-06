@@ -1,0 +1,37 @@
+{/* Table.mdx */}
+
+import { Canvas, Meta, ArgTypes, Story } from "@storybook/blocks";
+
+import * as TableStories from "./Table.stories";
+
+<Meta of={TableStories} />
+
+# Table
+
+The table component is used to display a list of data in a structured format. It provides a convenient way to organize and present information. Take a look at the responsive examples to see how the table adapts to smaller screens.
+
+<ArgTypes />
+
+## Basic Table
+
+Use the table component to easily display a list of data in a tabular format.
+
+<Canvas of={TableStories.BasicTable} />
+
+## Table with Sortable Header
+
+You can make a table sortable by defining the `sortable` property and providing a `comparator` function in the column definition object.
+
+<Canvas of={TableStories.TableWithSortableHeader} />
+
+## Table with Radio Buttons
+
+To enable row selection using radio buttons, set the `rowSelection` prop to `'single'`.
+
+<Canvas of={TableStories.TableWithRadioButton} />
+
+## Table with Checkboxes
+
+To enable row selection using checkboxes, set the `rowSelection` prop to `'single'`.
+
+<Canvas of={TableStories.TableWithCheckbox} />
